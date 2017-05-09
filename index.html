@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- CSS Imports -->
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button id="button-reset">Reset Map</button>
+      <!-- Button trigger modal -->
+      <button type="button" id="buttonoverview" data-toggle="modal" data-target="#overview">
+       Crash overview
+      </button>
+
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <h1>Crash in Philadelphia </h1>
+            <div class="input-group">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!--  modal -->
+
+      <div class="modal fade" id="overview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Crash data overview</h4>
+                </div>
+                <div class="modal-body">
+                    <h5 id="rectangle1"> 2008 - 2012</h5>
+                 <div class="modal-body">
+                   <label for="type">Car</label>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Year</th>
+                          <th>Collision Number</th>
+                          <th>Fatality rate</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>2012</td>
+                         <td>7,800</td>
+                         <td>0.73%</td>
+                       </tr>
+                       <tr>
+                         <td>2011</td>
+                         <td>8,599</td>
+                         <td>0.55%</td>
+                       </tr>
+                       <tr>
+                         <td>2010</td>
+                         <td>8,726</td>
+                         <td>0.55%</td>
+                       </tr>
+                       <tr>
+                         <td>2009</td>
+                         <td>8,653</td>
+                         <td>0.59%</td>
+                       </tr>
+                       <tr>
+                         <td>2008</td>
+                         <td>8,571</td>
+                         <td>0.68%</td>
+                       </tr>
+                     </tbody>
+                   </table>
+                 </div>
+                 <div class="modal-body">
+                   <label for="type">Bicycle</label>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Year</th>
+                          <th>Collision Number</th>
+                          <th>Fatality rate</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>2012</td>
+                         <td>457</td>
+                         <td>0.88%</td>
+                       </tr>
+                       <tr>
+                         <td>2011</td>
+                         <td>506</td>
+                         <td>0.40%</td>
+                       </tr>
+                       <tr>
+                         <td>2010</td>
+                         <td>566</td>
+                         <td>0.71%</td>
+                       </tr>
+                       <tr>
+                         <td>2009</td>
+                         <td>467</td>
+                         <td>0.43%</td>
+                       </tr>
+                       <tr>
+                         <td>2008</td>
+                         <td>441</td>
+                         <td>0.68%</td>
+                       </tr>
+                     </tbody>
+                   </table>
+                 </div>
+               </div><!-- /.modal-content -->
+             </div><!-- /.modal-dialog -->
+           </div><!-- /.modal -->
+         </div>
+              </div>
+            </div>
+          </div>
+
+    <!-- Filter -->
+    <div class="filter">
+      <form action=" " method=" ">
+        <h5> Filter: </h5>
+        <select id="year">
+        <option value="All years">All years</option>
+        <option value="2008">2008</option>
+        <option value="2009">2009</option>
+        <option value="2010">2010</option>
+        <option value="2011">2011</option>
+        <option value="2012">2012</option>
+
+        </select>
+        <br>
+        <br>
+        <select id="type">
+        <option value="All types">All types</option>
+        <option value="Cars">Cars</option>
+        <option value="Bike">Bicycles</option>
+        </select>
+        </form>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts">
+      <canvas id="lineChart" height="200" width="300"></canvas>
+    </div>
+
+    <!-- Map -->
+    <div id="map" class="map">
+    </div>
+
+    <!-- Javascript Imports -->
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
+    <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js"></script>
+
+
+
+    <script src="js/decode.js"></script>
+    <script src="js/setup.js"></script>
+  </body>
+</html>
